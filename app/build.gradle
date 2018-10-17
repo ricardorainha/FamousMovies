@@ -1,6 +1,10 @@
 apply plugin: 'com.android.application'
 
 android {
+    Properties localProperties = new Properties()
+    localProperties.load(project.rootProject.file('local.properties').newDataInputStream())
+    def TMDBApiKey = localProperties.getProperty("tmdb.apiKey")
+
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.ricardorainha.famousmovies"
@@ -11,7 +15,12 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
+        debug {
+            buildConfigField 'String', "TMDB_API_KEY", TMDBApiKey
+        }
+
         release {
+            buildConfigField 'String', "TMDB_API_KEY", TMDBApiKey
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
