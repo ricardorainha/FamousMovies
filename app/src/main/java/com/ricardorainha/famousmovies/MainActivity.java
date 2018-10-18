@@ -11,26 +11,43 @@ import java.util.Observer;
 
 public class MainActivity extends AppCompatActivity implements Observer {
 
+    private MoviesListController controller;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        MoviesListController controller = new MoviesListController();
+        controller = new MoviesListController();
         controller.addObserver(this);
-        controller.requestPopularMovies();
+
+        requestMovies(MoviesListController.RequestType.MOST_POPULAR);
     }
 
     @Override
     public void update(Observable observable, Object arg) {
         if (observable instanceof MoviesListController) {
             int result = (int) arg;
-            
+
             if (result == MoviesListController.RESPONSE_SUCCESS) {
                 Toast.makeText(this, "Success", Toast.LENGTH_LONG).show();
             } else if (result == MoviesListController.RESPONSE_FAILED) {
                 Toast.makeText(this, "Failed", Toast.LENGTH_LONG).show();
+            } else if (result == MoviesListController.REQUEST_FAILURE) {
+                Toast.makeText(this, "There was a problem with your request. Please check your internet connection.", Toast.LENGTH_LONG).show();
             }
+
+            showProgressBar(false);
         }
     }
+
+    private void requestMovies(MoviesListController.RequestType requestType) {
+        showProgressBar(true);
+        controller.requestMovies(requestType);
+    }
+
+    private void showProgressBar(boolean show) {
+
+    }
+
 }
