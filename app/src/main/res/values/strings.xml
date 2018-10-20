@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">FamousMovies</string>
+    <string name="warning_message">There was a problem when requesting information from the internet.\nPlease check your internet connection.</string>
 </resources>
