@@ -3,6 +3,7 @@ package com.ricardorainha.famousmovies.models;
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.ricardorainha.famousmovies.TheMovieDB;
 
 public class Movie {
 
@@ -105,6 +106,10 @@ public class Movie {
         this.posterPath = posterPath;
     }
 
+    public String getPosterFullPath() {
+        return TheMovieDB.API_IMAGE_BASE_URL + TheMovieDB.DEFAULT_POSTER_SIZE + getPosterPath();
+    }
+
     public String getOriginalLanguage() {
         return originalLanguage;
     }
@@ -159,6 +164,14 @@ public class Movie {
 
     public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
+    }
+
+    public String getReleaseYear() {
+        String date = getReleaseDate();
+        if (date.contains("-")) {
+            return "(" + date.substring(0, date.indexOf("-")) + ")";
+        }
+        return "";
     }
 
 }

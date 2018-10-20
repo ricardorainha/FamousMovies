@@ -2,12 +2,14 @@ package com.ricardorainha.famousmovies;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.ricardorainha.famousmovies.adapter.MoviesAdapter;
 import com.ricardorainha.famousmovies.controllers.MoviesListController;
 
 import java.util.Observable;
@@ -19,6 +21,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
     private RecyclerView rvMovies;
     private ProgressBar pbLoading;
     private FrameLayout flWarning;
+    private MoviesAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
             int result = (int) arg;
 
             if (result == MoviesListController.RESPONSE_SUCCESS) {
-                Toast.makeText(this, "Success", Toast.LENGTH_LONG).show();
+                setupMovieAdapter();
             } else if (result == MoviesListController.RESPONSE_FAILED) {
                 Toast.makeText(this, "Failed", Toast.LENGTH_LONG).show();
             } else if (result == MoviesListController.REQUEST_FAILURE) {
@@ -53,6 +56,9 @@ public class MainActivity extends AppCompatActivity implements Observer {
 
     private void configureViews() {
         rvMovies = (RecyclerView) findViewById(R.id.rv_movies);
+        int numberOfColumns = 2;
+        rvMovies.setLayoutManager(new GridLayoutManager(this, numberOfColumns));
+
         pbLoading = (ProgressBar) findViewById(R.id.pb_loading);
         flWarning = (FrameLayout) findViewById(R.id.fl_warning);
     }
@@ -69,6 +75,11 @@ public class MainActivity extends AppCompatActivity implements Observer {
     private void showWarningMessage(boolean show) {
         flWarning.setVisibility(show ? View.VISIBLE : View.GONE);
         rvMovies.setVisibility(show ? View.GONE : View.VISIBLE);
+    }
+
+    private void setupMovieAdapter() {
+        adapter = new MoviesAdapter(controller.getMoviesList().getResults());
+        rvMovies.setAdapter(adapter);
     }
 
 }
