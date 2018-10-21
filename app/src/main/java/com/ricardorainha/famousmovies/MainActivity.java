@@ -1,12 +1,15 @@
 package com.ricardorainha.famousmovies;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ricardorainha.famousmovies.adapter.MoviesAdapter;
@@ -21,6 +24,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
     private RecyclerView rvMovies;
     private ProgressBar pbLoading;
     private FrameLayout flWarning;
+    private TextView tvMoviesType;
     private MoviesAdapter adapter;
 
     @Override
@@ -54,6 +58,27 @@ public class MainActivity extends AppCompatActivity implements Observer {
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.action_sort_most_popular:
+                requestMovies(MoviesListController.RequestType.MOST_POPULAR);
+                return true;
+            case R.id.action_sort_top_rated:
+                requestMovies(MoviesListController.RequestType.TOP_RATED);
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
     private void configureViews() {
         rvMovies = (RecyclerView) findViewById(R.id.rv_movies);
         int numberOfColumns = 2;
@@ -61,11 +86,19 @@ public class MainActivity extends AppCompatActivity implements Observer {
 
         pbLoading = (ProgressBar) findViewById(R.id.pb_loading);
         flWarning = (FrameLayout) findViewById(R.id.fl_warning);
+        tvMoviesType = (TextView) findViewById(R.id.tv_movies_list_type);
     }
 
     private void requestMovies(MoviesListController.RequestType requestType) {
+        showMoviesViews(false);
+        showWarningMessage(false);
         showProgressBar(true);
         controller.requestMovies(requestType);
+    }
+
+    private void showMoviesViews(boolean show) {
+        rvMovies.setVisibility(show ? View.VISIBLE : View.GONE);
+        tvMoviesType.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
     private void showProgressBar(boolean show) {
@@ -74,12 +107,13 @@ public class MainActivity extends AppCompatActivity implements Observer {
 
     private void showWarningMessage(boolean show) {
         flWarning.setVisibility(show ? View.VISIBLE : View.GONE);
-        rvMovies.setVisibility(show ? View.GONE : View.VISIBLE);
     }
 
     private void setupMovieAdapter() {
         adapter = new MoviesAdapter(controller.getMoviesList().getResults());
         rvMovies.setAdapter(adapter);
+        tvMoviesType.setText(controller.getRequestType().getTitle());
+        showMoviesViews(true);
     }
 
 }

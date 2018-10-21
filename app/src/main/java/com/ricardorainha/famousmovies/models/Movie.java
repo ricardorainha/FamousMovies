@@ -1,9 +1,10 @@
 package com.ricardorainha.famousmovies.models;
 
-import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.ricardorainha.famousmovies.TheMovieDB;
+
+import java.util.List;
 
 public class Movie {
 
@@ -173,5 +174,4 @@ public class Movie {
         }
         return "";
     }
-
 }

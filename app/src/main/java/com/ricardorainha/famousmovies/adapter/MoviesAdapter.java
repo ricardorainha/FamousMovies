@@ -19,7 +19,6 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
 
     ArrayList<Movie> movies;
 
-
     public MoviesAdapter(List<Movie> movies) {
         this.movies = (ArrayList<Movie>) movies;
     }
