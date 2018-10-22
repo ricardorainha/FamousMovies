@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements Observer, MoviesA
         if ((savedInstanceState != null)
             && (savedInstanceState.containsKey(SAVED_MOVIES_LIST_KEY))) {
             currentMovies = savedInstanceState.getParcelableArrayList(SAVED_MOVIES_LIST_KEY);
-            currentMovieListType = MoviesListController.RequestType.fromValue(savedInstanceState.getString(SAVED_MOVIES_TYPE_KEY));
+            currentMovieListType = MoviesListController.RequestType.fromValue(savedInstanceState.getInt(SAVED_MOVIES_TYPE_KEY));
             setupMovieAdapter(currentMovies, currentMovieListType);
         }
         else {
@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements Observer, MoviesA
         if ((currentMovies != null)
                 && (currentMovieListType != null)) {
             outState.putParcelableArrayList(SAVED_MOVIES_LIST_KEY, (ArrayList<Movie>)currentMovies);
-            outState.putString(SAVED_MOVIES_TYPE_KEY, currentMovieListType.getTitle());
+            outState.putInt(SAVED_MOVIES_TYPE_KEY, currentMovieListType.getResourceId());
         }
         super.onSaveInstanceState(outState);
     }
@@ -78,10 +78,8 @@ public class MainActivity extends AppCompatActivity implements Observer, MoviesA
 
             if (result == MoviesListController.RESPONSE_SUCCESS) {
                 setupMovieAdapter(controller.getMoviesList().getResults(), controller.getRequestType());
-            } else if (result == MoviesListController.RESPONSE_FAILED) {
-                Toast.makeText(this, "Failed", Toast.LENGTH_LONG).show();
-            } else if (result == MoviesListController.REQUEST_FAILURE) {
-                Toast.makeText(this, "There was a problem with your request. Please check your internet connection.", Toast.LENGTH_LONG).show();
+            } else if ((result == MoviesListController.RESPONSE_FAILED) || (result == MoviesListController.REQUEST_FAILURE)) {
+                Toast.makeText(this, R.string.error_request_movies_list, Toast.LENGTH_LONG).show();
             }
 
             showWarningMessage(result != MoviesListController.RESPONSE_SUCCESS);
@@ -151,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements Observer, MoviesA
         currentMovieListType = moviesType;
         adapter = new MoviesAdapter(movies, this);
         rvMovies.setAdapter(adapter);
-        tvMoviesType.setText(moviesType.getTitle());
+        tvMoviesType.setText(getResources().getString(moviesType.getResourceId()));
         showMoviesViews(true);
     }
 

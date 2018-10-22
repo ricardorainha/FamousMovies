@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Filmes Famosos</string>
+    <string name="warning_message">Houve um problema ao requisitar informações da internet. \nPor favor, cheque sua conexão de internet.</string>
+    <string name="most_popular">Mostrar Mais Populares</string>
+    <string name="top_rated">Mostrar Melhores Avaliados</string>
+    <string name="details_error">Houve um erro ao carregar a atividade de detalhes. Por favor, tente novamente.</string>
+    <string name="release_date">Data de Lançamento</string>
+    <string name="vote_average">Média de Votos</string>
+    <string name="overview">Sinopse (em inglês)</string>
+    <string name="poster_description">Pôster do Filme</string>
+    <string name="error_request_movies_list">Erro carregando lista de filmes.</string>
+    <string name="most_popular_movies">Filmes Mais Populares</string>
+    <string name="top_rated_movies">Filmes Melhores Avaliados</string>
+</resources>

@@ -8,4 +8,7 @@
     <string name="vote_average">Vote Average</string>
     <string name="overview">Overview</string>
     <string name="poster_description">Movie Poster</string>
+    <string name="error_request_movies_list">Error requesting movies list.</string>
+    <string name="most_popular_movies">Most Popular Movies</string>
+    <string name="top_rated_movies">Top Rated Movies</string>
 </resources>

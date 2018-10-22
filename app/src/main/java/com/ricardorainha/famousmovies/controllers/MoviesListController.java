@@ -1,5 +1,6 @@
 package com.ricardorainha.famousmovies.controllers;
 
+import com.ricardorainha.famousmovies.R;
 import com.ricardorainha.famousmovies.TheMovieDB;
 import com.ricardorainha.famousmovies.models.MoviesList;
 
@@ -67,29 +68,25 @@ public class MoviesListController extends Observable implements Callback<MoviesL
     }
 
     public enum RequestType {
-        MOST_POPULAR("Most Popular Movies"),
-        TOP_RATED("Top Rated Movies");
+        MOST_POPULAR(R.string.most_popular_movies),
+        TOP_RATED(R.string.top_rated_movies);
 
-        private final String title;
+        private final int resourceId;
 
-        RequestType(String t) {
-            title = t;
+        RequestType(int id) {
+            resourceId = id;
         }
 
-        public static RequestType fromValue(String t) {
+        public static RequestType fromValue(int id) {
             for (RequestType reqType : RequestType.values())
-                if (reqType.title.equalsIgnoreCase(t))
+                if (reqType.resourceId == id)
                     return reqType;
 
             throw new IllegalArgumentException();
         }
 
-        public String getTitle() {
-            return title;
-        }
-
-        public String toString() {
-            return getTitle();
+        public int getResourceId() {
+            return resourceId;
         }
     }
 }
