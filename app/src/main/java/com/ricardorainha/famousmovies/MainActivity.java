@@ -14,7 +14,10 @@ import android.widget.Toast;
 
 import com.ricardorainha.famousmovies.adapter.MoviesAdapter;
 import com.ricardorainha.famousmovies.controllers.MoviesListController;
+import com.ricardorainha.famousmovies.models.Movie;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -27,6 +30,12 @@ public class MainActivity extends AppCompatActivity implements Observer {
     private TextView tvMoviesType;
     private MoviesAdapter adapter;
 
+    private List<Movie> currentMovies;
+    private MoviesListController.RequestType currentMovieListType;
+
+    private static final String SAVED_MOVIES_LIST_KEY = "moviesList";
+    private static final String SAVED_MOVIES_TYPE_KEY = "moviesType";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +46,25 @@ public class MainActivity extends AppCompatActivity implements Observer {
         controller = new MoviesListController();
         controller.addObserver(this);
 
-        requestMovies(MoviesListController.RequestType.MOST_POPULAR);
+        if ((savedInstanceState != null)
+            && (savedInstanceState.containsKey(SAVED_MOVIES_LIST_KEY))) {
+            currentMovies = savedInstanceState.getParcelableArrayList(SAVED_MOVIES_LIST_KEY);
+            currentMovieListType = MoviesListController.RequestType.fromValue(savedInstanceState.getString(SAVED_MOVIES_TYPE_KEY));
+            setupMovieAdapter(currentMovies, currentMovieListType);
+        }
+        else {
+            requestMovies(MoviesListController.RequestType.MOST_POPULAR);
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        if ((currentMovies != null)
+                && (currentMovieListType != null)) {
+            outState.putParcelableArrayList(SAVED_MOVIES_LIST_KEY, (ArrayList<Movie>)currentMovies);
+            outState.putString(SAVED_MOVIES_TYPE_KEY, currentMovieListType.getTitle());
+        }
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -46,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
             int result = (int) arg;
 
             if (result == MoviesListController.RESPONSE_SUCCESS) {
-                setupMovieAdapter();
+                setupMovieAdapter(controller.getMoviesList().getResults(), controller.getRequestType());
             } else if (result == MoviesListController.RESPONSE_FAILED) {
                 Toast.makeText(this, "Failed", Toast.LENGTH_LONG).show();
             } else if (result == MoviesListController.REQUEST_FAILURE) {
@@ -109,10 +136,12 @@ public class MainActivity extends AppCompatActivity implements Observer {
         flWarning.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
-    private void setupMovieAdapter() {
-        adapter = new MoviesAdapter(controller.getMoviesList().getResults());
+    private void setupMovieAdapter(List<Movie> movies, MoviesListController.RequestType moviesType) {
+        currentMovies = movies;
+        currentMovieListType = moviesType;
+        adapter = new MoviesAdapter(movies);
         rvMovies.setAdapter(adapter);
-        tvMoviesType.setText(controller.getRequestType().getTitle());
+        tvMoviesType.setText(moviesType.getTitle());
         showMoviesViews(true);
     }
 

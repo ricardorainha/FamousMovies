@@ -1,12 +1,15 @@
 package com.ricardorainha.famousmovies.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.ricardorainha.famousmovies.TheMovieDB;
 
 import java.util.List;
 
-public class Movie {
+public class Movie implements Parcelable {
 
     @SerializedName("vote_count")
     @Expose
@@ -50,6 +53,57 @@ public class Movie {
     @SerializedName("release_date")
     @Expose
     private String releaseDate;
+
+    protected Movie(Parcel in) {
+        voteCount = in.readInt();
+        id = in.readInt();
+        video = in.readByte() != 0;
+        voteAverage = in.readFloat();
+        title = in.readString();
+        popularity = in.readFloat();
+        posterPath = in.readString();
+        originalLanguage = in.readString();
+        originalTitle = in.readString();
+        backdropPath = in.readString();
+        adult = in.readByte() != 0;
+        overview = in.readString();
+        releaseDate = in.readString();
+    }
+
+    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
+        @Override
+        public Movie createFromParcel(Parcel in) {
+            return new Movie(in);
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(voteCount);
+        parcel.writeInt(id);
+        parcel.writeInt(video ? 1 : 0);
+        parcel.writeFloat(voteAverage);
+        parcel.writeString(title);
+        parcel.writeFloat(popularity);
+        parcel.writeString(posterPath);
+        parcel.writeString(originalLanguage);
+        parcel.writeString(originalTitle);
+        parcel.writeList(genreIds);
+        parcel.writeString(backdropPath);
+        parcel.writeInt(adult ? 1 : 0);
+        parcel.writeString(overview);
+        parcel.writeString(releaseDate);
+    }
 
     public int getVoteCount() {
         return voteCount;

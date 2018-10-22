@@ -76,6 +76,14 @@ public class MoviesListController extends Observable implements Callback<MoviesL
             title = t;
         }
 
+        public static RequestType fromValue(String t) {
+            for (RequestType reqType : RequestType.values())
+                if (reqType.title.equalsIgnoreCase(t))
+                    return reqType;
+
+            throw new IllegalArgumentException();
+        }
+
         public String getTitle() {
             return title;
         }
