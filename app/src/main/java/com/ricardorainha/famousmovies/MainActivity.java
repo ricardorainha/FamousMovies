@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-public class MainActivity extends AppCompatActivity implements Observer {
+public class MainActivity extends AppCompatActivity implements Observer, MoviesAdapter.MoviesListItemClickListener {
 
     private MoviesListController controller;
     private RecyclerView rvMovies;
@@ -139,10 +139,14 @@ public class MainActivity extends AppCompatActivity implements Observer {
     private void setupMovieAdapter(List<Movie> movies, MoviesListController.RequestType moviesType) {
         currentMovies = movies;
         currentMovieListType = moviesType;
-        adapter = new MoviesAdapter(movies);
+        adapter = new MoviesAdapter(movies, this);
         rvMovies.setAdapter(adapter);
         tvMoviesType.setText(moviesType.getTitle());
         showMoviesViews(true);
     }
 
+    @Override
+    public void onMoviesListItemClick(int itemIndex) {
+        Toast.makeText(this, "Index: " + itemIndex + " - " + currentMovies.get(itemIndex).getTitle(), Toast.LENGTH_LONG).show();
+    }
 }
