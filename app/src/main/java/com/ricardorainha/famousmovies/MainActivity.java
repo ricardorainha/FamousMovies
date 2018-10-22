@@ -2,6 +2,7 @@ package com.ricardorainha.famousmovies;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements Observer, MoviesA
     private FrameLayout flWarning;
     private TextView tvMoviesType;
     private MoviesAdapter adapter;
+    private SwipeRefreshLayout srlRefresh;
 
     private List<Movie> currentMovies;
     private MoviesListController.RequestType currentMovieListType;
@@ -116,6 +118,12 @@ public class MainActivity extends AppCompatActivity implements Observer, MoviesA
         pbLoading = (ProgressBar) findViewById(R.id.pb_loading);
         flWarning = (FrameLayout) findViewById(R.id.fl_warning);
         tvMoviesType = (TextView) findViewById(R.id.tv_movies_list_type);
+
+        srlRefresh = (SwipeRefreshLayout) findViewById(R.id.srl_refresh);
+        srlRefresh.setOnRefreshListener(() -> {
+            srlRefresh.setRefreshing(false); // explicitly disabling swipe progress indicator since we have our own
+            requestMovies(currentMovieListType);
+        });
     }
 
     private void requestMovies(MoviesListController.RequestType requestType) {
