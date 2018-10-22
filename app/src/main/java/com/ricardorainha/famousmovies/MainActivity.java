@@ -1,5 +1,6 @@
 package com.ricardorainha.famousmovies;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements Observer, MoviesA
 
     private static final String SAVED_MOVIES_LIST_KEY = "moviesList";
     private static final String SAVED_MOVIES_TYPE_KEY = "moviesType";
+    public static final String MOVIE_DETAILS_KEY = "movie";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,6 +149,11 @@ public class MainActivity extends AppCompatActivity implements Observer, MoviesA
 
     @Override
     public void onMoviesListItemClick(int itemIndex) {
-        Toast.makeText(this, "Index: " + itemIndex + " - " + currentMovies.get(itemIndex).getTitle(), Toast.LENGTH_LONG).show();
+        if (currentMovies != null && itemIndex < currentMovies.size()) {
+            Intent movieDetailsIntent = new Intent();
+            movieDetailsIntent.setClass(this, MovieDetailsActivity.class);
+            movieDetailsIntent.putExtra(MOVIE_DETAILS_KEY, currentMovies.get(itemIndex));
+            startActivity(movieDetailsIntent);
+        }
     }
 }

@@ -3,4 +3,9 @@
     <string name="warning_message">There was a problem when requesting information from the internet.\nPlease check your internet connection.</string>
     <string name="most_popular">Show Most Popular</string>
     <string name="top_rated">Show Top Rated</string>
+    <string name="details_error">There was an error loading the details activity. Please try again.</string>
+    <string name="release_date">Release Date</string>
+    <string name="vote_average">Vote Average</string>
+    <string name="overview">Overview</string>
+    <string name="poster_description">Movie Poster</string>
 </resources>
