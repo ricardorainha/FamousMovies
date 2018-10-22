@@ -7,6 +7,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.ricardorainha.famousmovies.TheMovieDB;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Movie implements Parcelable {
@@ -64,6 +65,8 @@ public class Movie implements Parcelable {
         posterPath = in.readString();
         originalLanguage = in.readString();
         originalTitle = in.readString();
+        genreIds = new ArrayList<Integer>();
+        in.readList(genreIds, List.class.getClassLoader());
         backdropPath = in.readString();
         adult = in.readByte() != 0;
         overview = in.readString();
@@ -91,7 +94,7 @@ public class Movie implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(voteCount);
         parcel.writeInt(id);
-        parcel.writeInt(video ? 1 : 0);
+        parcel.writeByte((byte) (video ? 1 : 0));
         parcel.writeFloat(voteAverage);
         parcel.writeString(title);
         parcel.writeFloat(popularity);
@@ -100,7 +103,7 @@ public class Movie implements Parcelable {
         parcel.writeString(originalTitle);
         parcel.writeList(genreIds);
         parcel.writeString(backdropPath);
-        parcel.writeInt(adult ? 1 : 0);
+        parcel.writeByte((byte) (adult ? 1 : 0));
         parcel.writeString(overview);
         parcel.writeString(releaseDate);
     }
