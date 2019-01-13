@@ -1,4 +1,4 @@
-package com.ricardorainha.famousmovies;
+package com.ricardorainha.famousmovies.view;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -7,7 +7,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.ricardorainha.famousmovies.R;
 import com.ricardorainha.famousmovies.models.Movie;
+import com.ricardorainha.famousmovies.view.MainActivity;
 
 public class MovieDetailsActivity extends AppCompatActivity {
 
@@ -37,19 +39,19 @@ public class MovieDetailsActivity extends AppCompatActivity {
     }
 
     private void configureViews() {
-        ivPoster = (ImageView) findViewById(R.id.iv_details_poster);
+        ivPoster = findViewById(R.id.iv_details_poster);
         Glide.with(this).load(movie.getPosterFullPath()).into(ivPoster);
 
-        tvTitle = (TextView) findViewById(R.id.tv_details_title);
+        tvTitle = findViewById(R.id.tv_details_title);
         tvTitle.setText(movie.getTitle());
 
-        tvReleaseDate = (TextView) findViewById(R.id.tv_details_release_date);
+        tvReleaseDate = findViewById(R.id.tv_details_release_date);
         tvReleaseDate.setText(movie.getReleaseDate());
 
-        tvAverage = (TextView) findViewById(R.id.tv_details_average);
+        tvAverage = findViewById(R.id.tv_details_average);
         tvAverage.setText(String.valueOf(movie.getVoteAverage()));
 
-        tvOverview = (TextView) findViewById(R.id.tv_details_overview);
+        tvOverview = findViewById(R.id.tv_details_overview);
         tvOverview.setText(movie.getOverview());
     }
 }

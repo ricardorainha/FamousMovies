@@ -1,7 +1,7 @@
 package com.ricardorainha.famousmovies.controllers;
 
 import com.ricardorainha.famousmovies.R;
-import com.ricardorainha.famousmovies.TheMovieDB;
+import com.ricardorainha.famousmovies.network.TheMovieDB;
 import com.ricardorainha.famousmovies.models.MoviesList;
 
 import java.util.Observable;

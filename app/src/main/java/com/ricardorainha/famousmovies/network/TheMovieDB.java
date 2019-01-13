@@ -1,7 +1,8 @@
-package com.ricardorainha.famousmovies;
+package com.ricardorainha.famousmovies.network;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.ricardorainha.famousmovies.BuildConfig;
 import com.ricardorainha.famousmovies.models.MoviesList;
 
 import retrofit2.Call;

@@ -1,4 +1,4 @@
-package com.ricardorainha.famousmovies;
+package com.ricardorainha.famousmovies.view;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,11 +9,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ricardorainha.famousmovies.R;
 import com.ricardorainha.famousmovies.adapter.MoviesAdapter;
 import com.ricardorainha.famousmovies.controllers.MoviesListController;
 import com.ricardorainha.famousmovies.models.Movie;
@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements Observer, MoviesA
     private MoviesListController controller;
     private RecyclerView rvMovies;
     private ProgressBar pbLoading;
-    private FrameLayout flWarning;
+    private TextView tvWarningMessage;
     private TextView tvMoviesType;
     private MoviesAdapter adapter;
     private SwipeRefreshLayout srlRefresh;
@@ -109,15 +109,15 @@ public class MainActivity extends AppCompatActivity implements Observer, MoviesA
     }
 
     private void configureViews() {
-        rvMovies = (RecyclerView) findViewById(R.id.rv_movies);
+        rvMovies = findViewById(R.id.rv_movies);
         int numberOfColumns = 2;
         rvMovies.setLayoutManager(new GridLayoutManager(this, numberOfColumns));
 
-        pbLoading = (ProgressBar) findViewById(R.id.pb_loading);
-        flWarning = (FrameLayout) findViewById(R.id.fl_warning);
-        tvMoviesType = (TextView) findViewById(R.id.tv_movies_list_type);
+        pbLoading = findViewById(R.id.pb_loading);
+        tvWarningMessage = findViewById(R.id.tv_warning_message);
+        tvMoviesType = findViewById(R.id.tv_movies_list_type);
 
-        srlRefresh = (SwipeRefreshLayout) findViewById(R.id.srl_refresh);
+        srlRefresh = findViewById(R.id.srl_refresh);
         srlRefresh.setOnRefreshListener(() -> {
             srlRefresh.setRefreshing(false); // explicitly disabling swipe progress indicator since we have our own
             requestMovies(currentMovieListType);
@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements Observer, MoviesA
     }
 
     private void showWarningMessage(boolean show) {
-        flWarning.setVisibility(show ? View.VISIBLE : View.GONE);
+        tvWarningMessage.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
     private void setupMovieAdapter(List<Movie> movies, MoviesListController.RequestType moviesType) {

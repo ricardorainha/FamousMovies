@@ -17,8 +17,8 @@ import java.util.List;
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewHolder> {
 
-    ArrayList<Movie> movies;
-    MoviesListItemClickListener listener;
+    private ArrayList<Movie> movies;
+    private MoviesListItemClickListener listener;
 
     public MoviesAdapter(List<Movie> movies, MoviesListItemClickListener listener) {
         this.movies = (ArrayList<Movie>) movies;
@@ -29,9 +29,8 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
     @Override
     public MovieViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int position) {
         View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.movie_list_item, viewGroup, false);
-        MovieViewHolder viewHolder = new MovieViewHolder(itemView);
 
-        return viewHolder;
+        return new MovieViewHolder(itemView);
     }
 
     @Override
@@ -53,13 +52,12 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
 
         ImageView mPoster;
         TextView mName;
-        TextView mVotePopularity;
 
         public MovieViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            mPoster = (ImageView) itemView.findViewById(R.id.iv_poster);
-            mName = (TextView) itemView.findViewById(R.id.tv_name);
+            mPoster = itemView.findViewById(R.id.iv_poster);
+            mName = itemView.findViewById(R.id.tv_name);
             itemView.setOnClickListener(this);
         }
 
