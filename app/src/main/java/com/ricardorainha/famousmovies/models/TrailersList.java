@@ -13,9 +13,9 @@ public class TrailersList implements Parcelable
     @SerializedName("id")
     @Expose
     private Integer id;
-    @SerializedName("Trailers")
+    @SerializedName("results")
     @Expose
-    private List<Trailer> Trailers = new ArrayList<Trailer>();
+    private List<Trailer> trailers = new ArrayList<Trailer>();
     public final static Parcelable.Creator<TrailersList> CREATOR = new Creator<TrailersList>() {
         @SuppressWarnings({"unchecked"})
         public TrailersList createFromParcel(Parcel in) {
@@ -29,7 +29,7 @@ public class TrailersList implements Parcelable
 
     protected TrailersList(Parcel in) {
         this.id = ((Integer) in.readValue((Integer.class.getClassLoader())));
-        in.readList(this.Trailers, (com.ricardorainha.famousmovies.models.Trailer.class.getClassLoader()));
+        in.readList(this.trailers, (com.ricardorainha.famousmovies.models.Trailer.class.getClassLoader()));
     }
 
     public TrailersList() {
@@ -44,16 +44,16 @@ public class TrailersList implements Parcelable
     }
 
     public List<Trailer> getTrailers() {
-        return Trailers;
+        return trailers;
     }
 
     public void setTrailers(List<Trailer> Trailers) {
-        this.Trailers = Trailers;
+        this.trailers = Trailers;
     }
 
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(id);
-        dest.writeList(Trailers);
+        dest.writeList(trailers);
     }
 
     public int describeContents() {

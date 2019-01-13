@@ -54,6 +54,8 @@ public class Movie implements Parcelable {
     @SerializedName("release_date")
     @Expose
     private String releaseDate;
+    private List<Trailer> videos;
+    private List<Review> reviews;
 
     protected Movie(Parcel in) {
         voteCount = in.readInt();
@@ -71,6 +73,10 @@ public class Movie implements Parcelable {
         adult = in.readByte() != 0;
         overview = in.readString();
         releaseDate = in.readString();
+        videos = new ArrayList<Trailer>();
+        in.readList(videos, Trailer.class.getClassLoader());
+        reviews = new ArrayList<Review>();
+        in.readList(reviews, Review.class.getClassLoader());
     }
 
     public static final Creator<Movie> CREATOR = new Creator<Movie>() {
@@ -106,6 +112,8 @@ public class Movie implements Parcelable {
         parcel.writeByte((byte) (adult ? 1 : 0));
         parcel.writeString(overview);
         parcel.writeString(releaseDate);
+        parcel.writeList(videos);
+        parcel.writeList(reviews);
     }
 
     public int getVoteCount() {
@@ -230,5 +238,21 @@ public class Movie implements Parcelable {
             return "(" + date.substring(0, date.indexOf("-")) + ")";
         }
         return "";
+    }
+
+    public List<Trailer> getVideos() {
+        return videos;
+    }
+
+    public void setVideos(List<Trailer> videos) {
+        this.videos = videos;
+    }
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
     }
 }

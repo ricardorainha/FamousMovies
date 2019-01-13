@@ -17,7 +17,7 @@ public class ReviewsList implements Parcelable
     @SerializedName("page")
     @Expose
     private Integer page;
-    @SerializedName("reviews")
+    @SerializedName("results")
     @Expose
     private List<Review> reviews = new ArrayList<Review>();
     @SerializedName("total_pages")
