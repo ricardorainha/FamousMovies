@@ -4,11 +4,14 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.ricardorainha.famousmovies.BuildConfig;
 import com.ricardorainha.famousmovies.models.MoviesList;
+import com.ricardorainha.famousmovies.models.ReviewsList;
+import com.ricardorainha.famousmovies.models.TrailersList;
 
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 
 public class TheMovieDB {
 
@@ -24,6 +27,12 @@ public class TheMovieDB {
 
         @GET("movie/top_rated" + API_KEY_PARAMETER)
         Call<MoviesList> getTopRatedMovies();
+
+        @GET("movie/{movieId}/videos" + API_KEY_PARAMETER)
+        Call<TrailersList> getMovieVideos(@Path("movieId") int movieId);
+
+        @GET("movie/{movieId}/reviews" + API_KEY_PARAMETER)
+        Call<ReviewsList> getMovieReviews(@Path("movieId") int movieId);
     }
 
     public static TheMovieDB.Endpoints getAPI() {
