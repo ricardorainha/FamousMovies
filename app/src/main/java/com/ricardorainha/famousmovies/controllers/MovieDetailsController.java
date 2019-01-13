@@ -18,12 +18,12 @@ public class MovieDetailsController extends Observable {
     private TheMovieDB.Endpoints moviesAPI = TheMovieDB.getAPI();
     private int movieId;
 
-    public static int VIDEOS_RESPONSE_SUCCESS = 654;
-    public static int VIDEOS_RESPONSE_FAILED = 753;
-    public static int VIDEOS_REQUEST_FAILURE = 159;
-    public static int REVIEWS_RESPONSE_SUCCESS = 154;
-    public static int REVIEWS_RESPONSE_FAILED = 741;
-    public static int REVIEWS_REQUEST_FAILURE = 369;
+    public static final int VIDEOS_RESPONSE_SUCCESS = 654;
+    public static final int VIDEOS_RESPONSE_FAILED = 753;
+    public static final int VIDEOS_REQUEST_FAILURE = 159;
+    public static final int REVIEWS_RESPONSE_SUCCESS = 154;
+    public static final int REVIEWS_RESPONSE_FAILED = 741;
+    public static final int REVIEWS_REQUEST_FAILURE = 369;
 
     private List<Trailer> trailerList;
     private List<Review> reviewList;
@@ -90,4 +90,11 @@ public class MovieDetailsController extends Observable {
         notifyObservers(notificationId);
     }
 
+    public List<Trailer> getTrailerList() {
+        return trailerList;
+    }
+
+    public List<Review> getReviewList() {
+        return reviewList;
+    }
 }
