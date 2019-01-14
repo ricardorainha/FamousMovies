@@ -5,7 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.ricardorainha.famousmovies.BuildConfig;
 import com.ricardorainha.famousmovies.models.MoviesList;
 import com.ricardorainha.famousmovies.models.ReviewsList;
-import com.ricardorainha.famousmovies.models.TrailersList;
+import com.ricardorainha.famousmovies.models.VideosList;
 
 import retrofit2.Call;
 import retrofit2.Retrofit;
@@ -29,7 +29,7 @@ public class TheMovieDB {
         Call<MoviesList> getTopRatedMovies();
 
         @GET("movie/{movieId}/videos" + API_KEY_PARAMETER)
-        Call<TrailersList> getMovieVideos(@Path("movieId") int movieId);
+        Call<VideosList> getMovieVideos(@Path("movieId") int movieId);
 
         @GET("movie/{movieId}/reviews" + API_KEY_PARAMETER)
         Call<ReviewsList> getMovieReviews(@Path("movieId") int movieId);

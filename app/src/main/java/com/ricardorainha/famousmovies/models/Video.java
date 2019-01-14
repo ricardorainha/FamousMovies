@@ -1,14 +1,17 @@
 package com.ricardorainha.famousmovies.models;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Trailer implements Parcelable
+public class Video implements Parcelable
 {
 
     private static final String YOUTUBE_THUMB_URL = "https://img.youtube.com/vi/%s/0.jpg";
+    private static final String YOUTUBE_VIDEO_URL = "https://www.youtube.com/watch?v=%s";
 
     @SerializedName("id")
     @Expose
@@ -35,18 +38,18 @@ public class Trailer implements Parcelable
     @Expose
     private String type;
 
-    public final static Parcelable.Creator<Trailer> CREATOR = new Creator<Trailer>() {
+    public final static Parcelable.Creator<Video> CREATOR = new Creator<Video>() {
         @SuppressWarnings({"unchecked"})
-        public Trailer createFromParcel(Parcel in) {
-            return new Trailer(in);
+        public Video createFromParcel(Parcel in) {
+            return new Video(in);
         }
 
-        public Trailer[] newArray(int size) {
-            return (new Trailer[size]);
+        public Video[] newArray(int size) {
+            return (new Video[size]);
         }
     };
 
-    protected Trailer(Parcel in) {
+    protected Video(Parcel in) {
         this.id = ((String) in.readValue((String.class.getClassLoader())));
         this.iso6391 = ((String) in.readValue((String.class.getClassLoader())));
         this.iso31661 = ((String) in.readValue((String.class.getClassLoader())));
@@ -57,7 +60,7 @@ public class Trailer implements Parcelable
         this.type = ((String) in.readValue((String.class.getClassLoader())));
     }
 
-    public Trailer() {
+    public Video() {
     }
 
     public String getId() {
@@ -126,6 +129,13 @@ public class Trailer implements Parcelable
 
     public String getThumbnailURL() {
         return String.format(YOUTUBE_THUMB_URL, key);
+    }
+
+    public Intent getOpenVideoIntent() {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(String.format(YOUTUBE_VIDEO_URL, getKey())));
+        return intent;
     }
 
     public void writeToParcel(Parcel dest, int flags) {

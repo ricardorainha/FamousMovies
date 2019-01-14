@@ -2,8 +2,8 @@ package com.ricardorainha.famousmovies.controllers;
 
 import com.ricardorainha.famousmovies.models.Review;
 import com.ricardorainha.famousmovies.models.ReviewsList;
-import com.ricardorainha.famousmovies.models.Trailer;
-import com.ricardorainha.famousmovies.models.TrailersList;
+import com.ricardorainha.famousmovies.models.Video;
+import com.ricardorainha.famousmovies.models.VideosList;
 import com.ricardorainha.famousmovies.network.TheMovieDB;
 
 import java.util.List;
@@ -25,7 +25,7 @@ public class MovieDetailsController extends Observable {
     public static final int REVIEWS_RESPONSE_FAILED = 741;
     public static final int REVIEWS_REQUEST_FAILURE = 369;
 
-    private List<Trailer> trailerList;
+    private List<Video> videoList;
     private List<Review> reviewList;
 
     public MovieDetailsController(int movieId) {
@@ -39,12 +39,12 @@ public class MovieDetailsController extends Observable {
 
     public void requestVideos() {
         if (moviesAPI != null) {
-            Call<TrailersList> trailersCall = moviesAPI.getMovieVideos(movieId);
-            trailersCall.enqueue(new Callback<TrailersList>() {
+            Call<VideosList> trailersCall = moviesAPI.getMovieVideos(movieId);
+            trailersCall.enqueue(new Callback<VideosList>() {
                 @Override
-                public void onResponse(Call<TrailersList> call, Response<TrailersList> response) {
+                public void onResponse(Call<VideosList> call, Response<VideosList> response) {
                     if (response.isSuccessful()) {
-                        trailerList = response.body().getTrailers();
+                        videoList = response.body().getVideos();
                         notifyDetailsObservers(VIDEOS_RESPONSE_SUCCESS);
                     }
                     else {
@@ -53,7 +53,7 @@ public class MovieDetailsController extends Observable {
                 }
 
                 @Override
-                public void onFailure(Call<TrailersList> call, Throwable t) {
+                public void onFailure(Call<VideosList> call, Throwable t) {
                     t.printStackTrace();
                     notifyDetailsObservers(VIDEOS_REQUEST_FAILURE);
                 }
@@ -90,8 +90,8 @@ public class MovieDetailsController extends Observable {
         notifyObservers(notificationId);
     }
 
-    public List<Trailer> getTrailerList() {
-        return trailerList;
+    public List<Video> getVideoList() {
+        return videoList;
     }
 
     public List<Review> getReviewList() {

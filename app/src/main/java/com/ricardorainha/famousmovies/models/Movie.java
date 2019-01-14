@@ -54,7 +54,7 @@ public class Movie implements Parcelable {
     @SerializedName("release_date")
     @Expose
     private String releaseDate;
-    private List<Trailer> videos;
+    private List<Video> videos;
     private List<Review> reviews;
 
     protected Movie(Parcel in) {
@@ -73,8 +73,8 @@ public class Movie implements Parcelable {
         adult = in.readByte() != 0;
         overview = in.readString();
         releaseDate = in.readString();
-        videos = new ArrayList<Trailer>();
-        in.readList(videos, Trailer.class.getClassLoader());
+        videos = new ArrayList<Video>();
+        in.readList(videos, Video.class.getClassLoader());
         reviews = new ArrayList<Review>();
         in.readList(reviews, Review.class.getClassLoader());
     }
@@ -240,11 +240,11 @@ public class Movie implements Parcelable {
         return "";
     }
 
-    public List<Trailer> getVideos() {
+    public List<Video> getVideos() {
         return videos;
     }
 
-    public void setVideos(List<Trailer> videos) {
+    public void setVideos(List<Video> videos) {
         this.videos = videos;
     }
 
