@@ -1,5 +1,6 @@
 package com.ricardorainha.famousmovies.view;
 
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ImageView;
@@ -8,18 +9,25 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.ricardorainha.famousmovies.R;
+import com.ricardorainha.famousmovies.adapter.MovieVideosAdapter;
+import com.ricardorainha.famousmovies.controllers.MovieDetailsController;
 import com.ricardorainha.famousmovies.models.Movie;
-import com.ricardorainha.famousmovies.view.MainActivity;
 
-public class MovieDetailsActivity extends AppCompatActivity {
+import java.util.Observable;
+import java.util.Observer;
+
+public class MovieDetailsActivity extends AppCompatActivity implements Observer {
 
     private ImageView ivPoster;
     private TextView tvTitle;
     private TextView tvReleaseDate;
     private TextView tvAverage;
     private TextView tvOverview;
+    private ViewPager videosPager;
 
     private Movie movie;
+    MovieDetailsController detailsController;
+    MovieVideosAdapter videosAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,9 +36,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         if ((getIntent() != null) && (getIntent().hasExtra(MainActivity.MOVIE_DETAILS_KEY))) {
             movie = (Movie) getIntent().getExtras().get(MainActivity.MOVIE_DETAILS_KEY);
-
             configureViews();
-
+            requestTrailersAndReviews();
         }
         else {
             Toast.makeText(this, R.string.details_error, Toast.LENGTH_LONG).show();
@@ -53,5 +60,48 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         tvOverview = findViewById(R.id.tv_details_overview);
         tvOverview.setText(movie.getOverview());
+
+        videosPager = findViewById(R.id.vp_videos);
+    }
+
+    private void requestTrailersAndReviews() {
+        detailsController = new MovieDetailsController(movie.getId());
+        detailsController.addObserver(this);
+        detailsController.requestVideosAndReviews();
+    }
+
+    @Override
+    public void update(Observable observable, Object o) {
+        if (detailsController != null) {
+            int notificationId = (int) o;
+
+            switch (notificationId) {
+                case MovieDetailsController.VIDEOS_RESPONSE_SUCCESS:
+                    configureVideos();
+                    break;
+                case MovieDetailsController.REVIEWS_RESPONSE_SUCCESS:
+                    configureReviews();
+                    break;
+                case MovieDetailsController.VIDEOS_RESPONSE_FAILED:
+                    break;
+                case MovieDetailsController.REVIEWS_RESPONSE_FAILED:
+                    break;
+                case MovieDetailsController.VIDEOS_REQUEST_FAILURE:
+                    break;
+                case MovieDetailsController.REVIEWS_REQUEST_FAILURE:
+                    break;
+            }
+        }
+    }
+
+    private void configureVideos() {
+        movie.setVideos(detailsController.getVideoList());
+
+        videosAdapter = new MovieVideosAdapter(movie.getVideos());
+        videosPager.setAdapter(videosAdapter);
+    }
+
+    private void configureReviews() {
+        movie.setReviews(detailsController.getReviewList());
     }
 }

@@ -12,4 +12,6 @@
     <string name="error_request_movies_list">Erro carregando lista de filmes.</string>
     <string name="most_popular_movies">Filmes Mais Populares</string>
     <string name="top_rated_movies">Filmes Melhores Avaliados</string>
+    <string name="reviews">Resenhas</string>
+    <string name="videos">Vídeos</string>
 </resources>
