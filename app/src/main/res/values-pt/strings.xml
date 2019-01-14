@@ -14,4 +14,6 @@
     <string name="top_rated_movies">Filmes Melhores Avaliados</string>
     <string name="reviews">Resenhas</string>
     <string name="videos">Vídeos</string>
+    <string name="review_author">Por %s:</string>
+    <string name="no_reviews">Ainda não existem resenhas para este filme.</string>
 </resources>

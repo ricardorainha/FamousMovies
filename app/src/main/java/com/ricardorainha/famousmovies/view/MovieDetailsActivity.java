@@ -3,15 +3,19 @@ package com.ricardorainha.famousmovies.view;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.ricardorainha.famousmovies.R;
-import com.ricardorainha.famousmovies.adapter.MovieVideosAdapter;
+import com.ricardorainha.famousmovies.adapter.VideosAdapter;
 import com.ricardorainha.famousmovies.controllers.MovieDetailsController;
 import com.ricardorainha.famousmovies.models.Movie;
+import com.ricardorainha.famousmovies.models.Review;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -24,10 +28,11 @@ public class MovieDetailsActivity extends AppCompatActivity implements Observer 
     private TextView tvAverage;
     private TextView tvOverview;
     private ViewPager videosPager;
+    private LinearLayout llReviews;
 
     private Movie movie;
     MovieDetailsController detailsController;
-    MovieVideosAdapter videosAdapter;
+    VideosAdapter videosAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +67,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements Observer 
         tvOverview.setText(movie.getOverview());
 
         videosPager = findViewById(R.id.vp_videos);
+
+        llReviews = findViewById(R.id.ll_reviews);
     }
 
     private void requestTrailersAndReviews() {
@@ -97,11 +104,27 @@ public class MovieDetailsActivity extends AppCompatActivity implements Observer 
     private void configureVideos() {
         movie.setVideos(detailsController.getVideoList());
 
-        videosAdapter = new MovieVideosAdapter(movie.getVideos());
+        videosAdapter = new VideosAdapter(movie.getVideos());
         videosPager.setAdapter(videosAdapter);
     }
 
     private void configureReviews() {
         movie.setReviews(detailsController.getReviewList());
+
+        if (movie.getReviews().size() > 0) {
+            llReviews.removeAllViews();
+            for (Review review : movie.getReviews()) {
+                View itemView = LayoutInflater.from(this).inflate(R.layout.review_item, llReviews, false);
+                ((TextView) itemView.findViewById(R.id.tv_author)).setText(String.format(getString(R.string.review_author), review.getAuthor()));
+                ((TextView) itemView.findViewById(R.id.tv_content)).setText(review.getContent());
+                llReviews.addView(itemView);
+            }
+        }
+        else {
+            TextView emptyReviews = new TextView(this);
+            emptyReviews.setText(getString(R.string.no_reviews));
+            llReviews.addView(emptyReviews);
+        }
     }
+
 }

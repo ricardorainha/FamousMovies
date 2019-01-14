@@ -11,12 +11,12 @@ import com.ricardorainha.famousmovies.models.Video;
 
 import java.util.List;
 
-public class MovieVideosAdapter extends PagerAdapter {
+public class VideosAdapter extends PagerAdapter {
 
     private List<Video> videos;
     private static final int visiblePages = 2;
 
-    public MovieVideosAdapter(List<Video> videos) {
+    public VideosAdapter(List<Video> videos) {
         this.videos = videos;
     }
 
