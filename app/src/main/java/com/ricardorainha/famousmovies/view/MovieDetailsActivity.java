@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +30,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements Observer 
     private TextView tvOverview;
     private ViewPager videosPager;
     private LinearLayout llReviews;
+    private ProgressBar pbVideos;
+    private ProgressBar pbReviews;
 
     private Movie movie;
     MovieDetailsController detailsController;
@@ -68,7 +71,11 @@ public class MovieDetailsActivity extends AppCompatActivity implements Observer 
 
         videosPager = findViewById(R.id.vp_videos);
 
+        pbVideos = findViewById(R.id.pb_videos);
+
         llReviews = findViewById(R.id.ll_reviews);
+
+        pbReviews = findViewById(R.id.pb_reviews);
     }
 
     private void requestTrailersAndReviews() {
@@ -106,10 +113,15 @@ public class MovieDetailsActivity extends AppCompatActivity implements Observer 
 
         videosAdapter = new VideosAdapter(movie.getVideos());
         videosPager.setAdapter(videosAdapter);
+
+        pbVideos.setVisibility(View.GONE);
+        videosPager.setVisibility(View.VISIBLE);
     }
 
     private void configureReviews() {
         movie.setReviews(detailsController.getReviewList());
+
+        pbReviews.setVisibility(View.GONE);
 
         if (movie.getReviews().size() > 0) {
             llReviews.removeAllViews();
