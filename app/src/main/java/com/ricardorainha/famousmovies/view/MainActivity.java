@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements Observer, MoviesA
     private List<Movie> currentMovies;
     private MoviesListController.RequestType currentMovieListType;
 
+    private static final MoviesListController.RequestType DEFAULT_REQUEST_TYPE = MoviesListController.RequestType.MOST_POPULAR;
     private static final String SAVED_MOVIES_LIST_KEY = "moviesList";
     private static final String SAVED_MOVIES_TYPE_KEY = "moviesType";
     public static final String MOVIE_DETAILS_KEY = "movie";
@@ -57,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements Observer, MoviesA
             setupMovieAdapter(currentMovies, currentMovieListType);
         }
         else {
-            requestMovies(MoviesListController.RequestType.MOST_POPULAR);
+            requestMovies(DEFAULT_REQUEST_TYPE);
         }
     }
 
@@ -120,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements Observer, MoviesA
         srlRefresh = findViewById(R.id.srl_refresh);
         srlRefresh.setOnRefreshListener(() -> {
             srlRefresh.setRefreshing(false); // explicitly disabling swipe progress indicator since we have our own
-            requestMovies(currentMovieListType);
+            requestMovies((currentMovieListType != null) ? currentMovieListType : DEFAULT_REQUEST_TYPE);
         });
     }
 

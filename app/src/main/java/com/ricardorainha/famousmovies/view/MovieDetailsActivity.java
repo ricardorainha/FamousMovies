@@ -29,9 +29,12 @@ public class MovieDetailsActivity extends AppCompatActivity implements Observer 
     private TextView tvAverage;
     private TextView tvOverview;
     private ViewPager videosPager;
+    private LinearLayout llVideos;
     private LinearLayout llReviews;
     private ProgressBar pbVideos;
     private ProgressBar pbReviews;
+    private View viewVideosError;
+    private View viewReviewsError;
 
     private Movie movie;
     MovieDetailsController detailsController;
@@ -71,17 +74,36 @@ public class MovieDetailsActivity extends AppCompatActivity implements Observer 
 
         videosPager = findViewById(R.id.vp_videos);
 
+        llVideos = findViewById(R.id.ll_videos);
+
         pbVideos = findViewById(R.id.pb_videos);
+
+        viewVideosError = LayoutInflater.from(this).inflate(R.layout.detail_error_message, null, false);
+        viewVideosError.findViewById(R.id.btn_try_again).setOnClickListener(v -> {
+            llVideos.removeView(viewVideosError);
+            showVideosLoading();
+            detailsController.requestVideos();
+        });
 
         llReviews = findViewById(R.id.ll_reviews);
 
         pbReviews = findViewById(R.id.pb_reviews);
+
+        viewReviewsError = LayoutInflater.from(this).inflate(R.layout.detail_error_message, null, false);
+        viewReviewsError.findViewById(R.id.btn_try_again).setOnClickListener(v -> {
+            llReviews.removeView(viewReviewsError);
+            showReviewsLoading();
+            detailsController.requestReviews();
+        });
     }
 
     private void requestTrailersAndReviews() {
         detailsController = new MovieDetailsController(movie.getId());
         detailsController.addObserver(this);
         detailsController.requestVideosAndReviews();
+
+        showVideosLoading();
+        showReviewsLoading();
     }
 
     @Override
@@ -97,12 +119,12 @@ public class MovieDetailsActivity extends AppCompatActivity implements Observer 
                     configureReviews();
                     break;
                 case MovieDetailsController.VIDEOS_RESPONSE_FAILED:
-                    break;
                 case MovieDetailsController.REVIEWS_RESPONSE_FAILED:
+                    showErrorMessage(R.string.error_message_response, notificationId);
                     break;
                 case MovieDetailsController.VIDEOS_REQUEST_FAILURE:
-                    break;
                 case MovieDetailsController.REVIEWS_REQUEST_FAILURE:
+                    showErrorMessage(R.string.error_message_request, notificationId);
                     break;
             }
         }
@@ -114,14 +136,14 @@ public class MovieDetailsActivity extends AppCompatActivity implements Observer 
         videosAdapter = new VideosAdapter(movie.getVideos());
         videosPager.setAdapter(videosAdapter);
 
-        pbVideos.setVisibility(View.GONE);
+        hideVideosLoading();
         videosPager.setVisibility(View.VISIBLE);
     }
 
     private void configureReviews() {
         movie.setReviews(detailsController.getReviewList());
 
-        pbReviews.setVisibility(View.GONE);
+        hideReviewsLoading();
 
         if (movie.getReviews().size() > 0) {
             llReviews.removeAllViews();
@@ -136,6 +158,37 @@ public class MovieDetailsActivity extends AppCompatActivity implements Observer 
             TextView emptyReviews = new TextView(this);
             emptyReviews.setText(getString(R.string.no_reviews));
             llReviews.addView(emptyReviews);
+        }
+    }
+
+    private void showVideosLoading() {
+        pbVideos.setVisibility(View.VISIBLE);
+    }
+
+    private void hideVideosLoading() {
+        pbVideos.setVisibility(View.GONE);
+    }
+
+    private void showReviewsLoading() {
+        pbReviews.setVisibility(View.VISIBLE);
+    }
+
+    private void hideReviewsLoading() {
+        pbReviews.setVisibility(View.GONE);
+    }
+
+
+    private void showErrorMessage(int messageId, int errorId) {
+        if (errorId == MovieDetailsController.VIDEOS_RESPONSE_FAILED
+            || errorId == MovieDetailsController.VIDEOS_REQUEST_FAILURE) {
+            hideVideosLoading();
+            ((TextView)viewVideosError.findViewById(R.id.tv_error_message)).setText(messageId);
+            llVideos.addView(viewVideosError);
+        }
+        else {
+            hideReviewsLoading();
+            ((TextView)viewReviewsError.findViewById(R.id.tv_error_message)).setText(messageId);
+            llReviews.addView(viewReviewsError);
         }
     }
 
