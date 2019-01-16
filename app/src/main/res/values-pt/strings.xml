@@ -19,4 +19,5 @@
     <string name="try_again">Tentar novamente</string>
     <string name="error_message_response">Houve um problema ao receber informações do servidor.</string>
     <string name="error_message_request">Houve um problema ao requisitar informações ao servidor.</string>
+    <string name="favorites">Favoritos</string>
 </resources>

@@ -56,6 +56,7 @@ public class Movie implements Parcelable {
     private String releaseDate;
     private List<Video> videos;
     private List<Review> reviews;
+    private boolean isFavorite = false;
 
     protected Movie(Parcel in) {
         voteCount = in.readInt();
@@ -77,6 +78,7 @@ public class Movie implements Parcelable {
         in.readList(videos, Video.class.getClassLoader());
         reviews = new ArrayList<Review>();
         in.readList(reviews, Review.class.getClassLoader());
+        isFavorite = in.readByte() != 0;
     }
 
     public static final Creator<Movie> CREATOR = new Creator<Movie>() {
@@ -114,6 +116,7 @@ public class Movie implements Parcelable {
         parcel.writeString(releaseDate);
         parcel.writeList(videos);
         parcel.writeList(reviews);
+        parcel.writeByte((byte) (isFavorite ? 1 : 0));
     }
 
     public int getVoteCount() {
@@ -254,5 +257,13 @@ public class Movie implements Parcelable {
 
     public void setReviews(List<Review> reviews) {
         this.reviews = reviews;
+    }
+
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
     }
 }

@@ -4,6 +4,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -54,6 +56,25 @@ public class MovieDetailsActivity extends AppCompatActivity implements Observer 
             Toast.makeText(this, R.string.details_error, Toast.LENGTH_LONG).show();
             finish();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.details_menu, menu);
+        changeMenuIcon(menu.findItem(R.id.action_toggle_favorite));
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_toggle_favorite:
+                toggleFavorite(item);
+                break;
+
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void configureViews() {
@@ -177,7 +198,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements Observer 
         pbReviews.setVisibility(View.GONE);
     }
 
-
     private void showErrorMessage(int messageId, int errorId) {
         if (errorId == MovieDetailsController.VIDEOS_RESPONSE_FAILED
             || errorId == MovieDetailsController.VIDEOS_REQUEST_FAILURE) {
@@ -190,6 +210,15 @@ public class MovieDetailsActivity extends AppCompatActivity implements Observer 
             ((TextView)viewReviewsError.findViewById(R.id.tv_error_message)).setText(messageId);
             llReviews.addView(viewReviewsError);
         }
+    }
+
+    private void toggleFavorite(MenuItem item) {
+        movie.setFavorite(!movie.isFavorite());
+        changeMenuIcon(item);
+    }
+
+    private void changeMenuIcon(MenuItem item) {
+        item.setIcon(movie.isFavorite() ? android.R.drawable.btn_star_big_on : android.R.drawable.btn_star_big_off);
     }
 
 }
