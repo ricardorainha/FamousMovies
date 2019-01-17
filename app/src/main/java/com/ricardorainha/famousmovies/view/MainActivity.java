@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.ricardorainha.famousmovies.R;
 import com.ricardorainha.famousmovies.adapter.MoviesAdapter;
 import com.ricardorainha.famousmovies.controllers.MoviesListController;
+import com.ricardorainha.famousmovies.database.MovieDatabase;
 import com.ricardorainha.famousmovies.models.Movie;
 
 import java.util.ArrayList;
@@ -78,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements Observer, MoviesA
             int result = (int) arg;
 
             if (result == MoviesListController.RESPONSE_SUCCESS) {
-                setupMovieAdapter(controller.getMoviesList().getResults(), controller.getRequestType());
+                setupMovieAdapter(controller.getMoviesList(), controller.getRequestType());
             } else if ((result == MoviesListController.RESPONSE_FAILED) || (result == MoviesListController.REQUEST_FAILURE)) {
                 Toast.makeText(this, R.string.error_request_movies_list, Toast.LENGTH_LONG).show();
             }
@@ -103,6 +104,9 @@ public class MainActivity extends AppCompatActivity implements Observer, MoviesA
                 return true;
             case R.id.action_sort_top_rated:
                 requestMovies(MoviesListController.RequestType.TOP_RATED);
+                return true;
+            case R.id.action_show_favorites:
+                requestMovies(MoviesListController.RequestType.FAVORITES);
                 return true;
         }
 
@@ -129,7 +133,10 @@ public class MainActivity extends AppCompatActivity implements Observer, MoviesA
         showMoviesViews(false);
         showWarningMessage(false);
         showProgressBar(true);
-        controller.requestMovies(requestType);
+        if (requestType == MoviesListController.RequestType.FAVORITES)
+            controller.requestFavorites(this);
+        else
+            controller.requestMovies(requestType);
     }
 
     private void showMoviesViews(boolean show) {

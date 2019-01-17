@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.ricardorainha.famousmovies.R;
 import com.ricardorainha.famousmovies.adapter.VideosAdapter;
 import com.ricardorainha.famousmovies.controllers.MovieDetailsController;
+import com.ricardorainha.famousmovies.database.MovieDatabase;
 import com.ricardorainha.famousmovies.models.Movie;
 import com.ricardorainha.famousmovies.models.Review;
 
@@ -41,6 +42,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements Observer 
     private Movie movie;
     MovieDetailsController detailsController;
     VideosAdapter videosAdapter;
+    private MovieDatabase mDb = MovieDatabase.getInstance(getApplicationContext());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +53,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements Observer 
             movie = (Movie) getIntent().getExtras().get(MainActivity.MOVIE_DETAILS_KEY);
             configureViews();
             requestTrailersAndReviews();
+
         }
         else {
             Toast.makeText(this, R.string.details_error, Toast.LENGTH_LONG).show();

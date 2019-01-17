@@ -1,9 +1,14 @@
 package com.ricardorainha.famousmovies.controllers;
 
+import android.content.Context;
+
 import com.ricardorainha.famousmovies.R;
+import com.ricardorainha.famousmovies.database.MovieDatabase;
+import com.ricardorainha.famousmovies.models.Movie;
 import com.ricardorainha.famousmovies.network.TheMovieDB;
 import com.ricardorainha.famousmovies.models.MoviesList;
 
+import java.util.List;
 import java.util.Observable;
 
 import retrofit2.Call;
@@ -13,7 +18,7 @@ import retrofit2.Response;
 public class MoviesListController extends Observable implements Callback<MoviesList> {
 
     private TheMovieDB.Endpoints moviesAPI;
-    private MoviesList moviesList;
+    private List<Movie> moviesList;
     private RequestType requestType;
 
     public static int RESPONSE_SUCCESS = 999;
@@ -38,7 +43,14 @@ public class MoviesListController extends Observable implements Callback<MoviesL
         }
     }
 
-    public MoviesList getMoviesList() {
+    public void requestFavorites(Context context) {
+        requestType = RequestType.FAVORITES;
+        moviesList = MovieDatabase.getInstance(context.getApplicationContext()).movieDAO().getAllFavorites();
+        setChanged();
+        notifyObservers(RESPONSE_SUCCESS);
+    }
+
+    public List<Movie> getMoviesList() {
         return moviesList;
     }
 
@@ -49,7 +61,7 @@ public class MoviesListController extends Observable implements Callback<MoviesL
     @Override
     public void onResponse(Call<MoviesList> call, Response<MoviesList> response) {
         if (response.isSuccessful()) {
-            moviesList = response.body();
+            moviesList = response.body().getResults();
             setChanged();
             notifyObservers(RESPONSE_SUCCESS);
         }
@@ -69,7 +81,8 @@ public class MoviesListController extends Observable implements Callback<MoviesL
 
     public enum RequestType {
         MOST_POPULAR(R.string.most_popular_movies),
-        TOP_RATED(R.string.top_rated_movies);
+        TOP_RATED(R.string.top_rated_movies),
+        FAVORITES(R.string.favorites);
 
         private final int resourceId;
 
