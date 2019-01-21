@@ -4,6 +4,7 @@ import com.ricardorainha.famousmovies.models.Movie;
 
 import java.util.List;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -13,7 +14,7 @@ import androidx.room.Query;
 public interface MovieDAO {
 
     @Query("SELECT * FROM " + MovieDatabase.FAVORITES_TABLE_NAME)
-    List<Movie> getAllFavorites();
+    LiveData<List<Movie>> getAllFavorites();
 
     @Insert
     void addToFavorites(Movie favorite);

@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".view.MovieDetailsActivity">
 
-    <androidx.constraintlayout.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -122,7 +122,7 @@
             app:layout_constraintStart_toStartOf="@+id/tv_details_overview"
             app:layout_constraintTop_toBottomOf="@+id/tv_details_overview" />
 
-        <android.support.v4.view.ViewPager
+        <androidx.viewpager.widget.ViewPager
             android:id="@+id/vp_videos"
             android:layout_width="match_parent"
             android:layout_height="120dp"
@@ -188,6 +188,6 @@
 
         </LinearLayout>
 
-    </androidx.constraintlayout.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.core.widget.NestedScrollView>

@@ -23,6 +23,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
 import androidx.viewpager.widget.ViewPager;
 
 public class MovieDetailsActivity extends AppCompatActivity implements Observer {
@@ -41,20 +42,22 @@ public class MovieDetailsActivity extends AppCompatActivity implements Observer 
     private View viewReviewsError;
 
     private Movie movie;
+
     MovieDetailsController detailsController;
     VideosAdapter videosAdapter;
-    private MovieDatabase mDb = MovieDatabase.getInstance(getApplicationContext());
+    private MovieDatabase mDb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_details);
 
+        mDb = MovieDatabase.getInstance(this.getApplicationContext());
+
         if ((getIntent() != null) && (getIntent().hasExtra(MainActivity.MOVIE_DETAILS_KEY))) {
             movie = (Movie) getIntent().getExtras().get(MainActivity.MOVIE_DETAILS_KEY);
             configureViews();
             requestTrailersAndReviews();
-
         }
         else {
             Toast.makeText(this, R.string.details_error, Toast.LENGTH_LONG).show();
@@ -218,6 +221,12 @@ public class MovieDetailsActivity extends AppCompatActivity implements Observer 
 
     private void toggleFavorite(MenuItem item) {
         movie.setFavorite(!movie.isFavorite());
+        if (movie.isFavorite()) {
+            mDb.movieDAO().addToFavorites(movie);
+        }
+        else {
+            mDb.movieDAO().removeFromFavorites(movie);
+        }
         changeMenuIcon(item);
     }
 

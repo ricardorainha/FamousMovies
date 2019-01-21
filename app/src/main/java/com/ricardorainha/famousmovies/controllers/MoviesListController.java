@@ -43,13 +43,6 @@ public class MoviesListController extends Observable implements Callback<MoviesL
         }
     }
 
-    public void requestFavorites(Context context) {
-        requestType = RequestType.FAVORITES;
-        moviesList = MovieDatabase.getInstance(context.getApplicationContext()).movieDAO().getAllFavorites();
-        setChanged();
-        notifyObservers(RESPONSE_SUCCESS);
-    }
-
     public List<Movie> getMoviesList() {
         return moviesList;
     }
