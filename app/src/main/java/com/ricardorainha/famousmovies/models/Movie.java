@@ -46,6 +46,7 @@ public class Movie implements Parcelable {
     @SerializedName("original_title")
     @Expose
     private String originalTitle;
+    @Ignore
     @SerializedName("genre_ids")
     @Expose
     private List<Integer> genreIds = null;
@@ -67,7 +68,7 @@ public class Movie implements Parcelable {
     private List<Review> reviews = new ArrayList<>();
     private boolean isFavorite = false;
 
-    public Movie(int voteCount, int id, boolean video, float voteAverage, String title, float popularity, String posterPath, String originalLanguage, String originalTitle, List<Integer> genreIds, String backdropPath, boolean adult, String overview, String releaseDate, boolean isFavorite) {
+    public Movie(int voteCount, int id, boolean video, float voteAverage, String title, float popularity, String posterPath, String originalLanguage, String originalTitle, String backdropPath, boolean adult, String overview, String releaseDate, boolean isFavorite) {
         this.voteCount = voteCount;
         this.id = id;
         this.video = video;
@@ -77,7 +78,6 @@ public class Movie implements Parcelable {
         this.posterPath = posterPath;
         this.originalLanguage = originalLanguage;
         this.originalTitle = originalTitle;
-        this.genreIds = genreIds;
         this.backdropPath = backdropPath;
         this.adult = adult;
         this.overview = overview;

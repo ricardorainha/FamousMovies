@@ -1,7 +1,5 @@
 package com.ricardorainha.famousmovies.view;
 
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,6 +21,9 @@ import com.ricardorainha.famousmovies.models.Review;
 
 import java.util.Observable;
 import java.util.Observer;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
 
 public class MovieDetailsActivity extends AppCompatActivity implements Observer {
 
