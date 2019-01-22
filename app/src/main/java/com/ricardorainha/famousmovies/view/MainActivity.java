@@ -4,11 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,7 +21,6 @@ import android.widget.Toast;
 import com.ricardorainha.famousmovies.R;
 import com.ricardorainha.famousmovies.adapter.MoviesAdapter;
 import com.ricardorainha.famousmovies.controllers.MoviesListController;
-import com.ricardorainha.famousmovies.database.MovieDatabase;
 import com.ricardorainha.famousmovies.models.Movie;
 
 import java.util.ArrayList;
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements Observer, MoviesA
     private List<Movie> currentMovies;
     private MoviesListController.RequestType currentMovieListType;
 
-    private MovieDatabase mDb;
+    private MainViewModel viewModel;
 
     private static final MoviesListController.RequestType DEFAULT_REQUEST_TYPE = MoviesListController.RequestType.MOST_POPULAR;
     private static final String SAVED_MOVIES_LIST_KEY = "moviesList";
@@ -51,6 +52,14 @@ public class MainActivity extends AppCompatActivity implements Observer, MoviesA
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+        viewModel.getFavorites().observe(this, favorites ->  {
+            if (currentMovieListType == MoviesListController.RequestType.FAVORITES) {
+                Log.d("MainActivity", "Updating favorites list");
+                showFavorites();
+            }
+        });
 
         configureViews();
 
@@ -139,13 +148,7 @@ public class MainActivity extends AppCompatActivity implements Observer, MoviesA
         showWarningMessage(false);
         showProgressBar(true);
         if (requestType == MoviesListController.RequestType.FAVORITES) {
-            mDb = MovieDatabase.getInstance(this.getApplicationContext());
-            final LiveData<List<Movie>> favorites = mDb.movieDAO().getAllFavorites();
-            favorites.observe(this, movies ->  {
-                setupMovieAdapter(movies, MoviesListController.RequestType.FAVORITES);
-                showWarningMessage(false);
-                showProgressBar(false);
-            });
+            showFavorites();
         }
         else
             controller.requestMovies(requestType);
@@ -173,12 +176,19 @@ public class MainActivity extends AppCompatActivity implements Observer, MoviesA
         showMoviesViews(true);
     }
 
+    private void showFavorites() {
+        setupMovieAdapter(viewModel.getFavorites().getValue(), MoviesListController.RequestType.FAVORITES);
+        showWarningMessage(false);
+        showProgressBar(false);
+    }
+
     @Override
     public void onMoviesListItemClick(int itemIndex) {
         if (currentMovies != null && itemIndex < currentMovies.size()) {
             Intent movieDetailsIntent = new Intent();
             movieDetailsIntent.setClass(this, MovieDetailsActivity.class);
             movieDetailsIntent.putExtra(MOVIE_DETAILS_KEY, currentMovies.get(itemIndex));
+
             startActivity(movieDetailsIntent);
         }
     }

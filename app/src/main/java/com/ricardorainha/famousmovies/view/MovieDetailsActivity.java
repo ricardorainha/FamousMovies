@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.ricardorainha.famousmovies.R;
 import com.ricardorainha.famousmovies.adapter.VideosAdapter;
 import com.ricardorainha.famousmovies.controllers.MovieDetailsController;
+import com.ricardorainha.famousmovies.database.DBExecutor;
 import com.ricardorainha.famousmovies.database.MovieDatabase;
 import com.ricardorainha.famousmovies.models.Movie;
 import com.ricardorainha.famousmovies.models.Review;
@@ -23,7 +24,6 @@ import java.util.Observable;
 import java.util.Observer;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LiveData;
 import androidx.viewpager.widget.ViewPager;
 
 public class MovieDetailsActivity extends AppCompatActivity implements Observer {
@@ -52,10 +52,12 @@ public class MovieDetailsActivity extends AppCompatActivity implements Observer 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_details);
 
-        mDb = MovieDatabase.getInstance(this.getApplicationContext());
+        mDb = MovieDatabase.getInstance(this.getApplication());
 
         if ((getIntent() != null) && (getIntent().hasExtra(MainActivity.MOVIE_DETAILS_KEY))) {
             movie = (Movie) getIntent().getExtras().get(MainActivity.MOVIE_DETAILS_KEY);
+            DBExecutor.getInstance().getExecutor().execute(() -> movie.setFavorite(mDb.movieDAO().getFavoriteById(movie.getId()) != null));
+
             configureViews();
             requestTrailersAndReviews();
         }
@@ -222,10 +224,10 @@ public class MovieDetailsActivity extends AppCompatActivity implements Observer 
     private void toggleFavorite(MenuItem item) {
         movie.setFavorite(!movie.isFavorite());
         if (movie.isFavorite()) {
-            mDb.movieDAO().addToFavorites(movie);
+            DBExecutor.getInstance().getExecutor().execute(() -> mDb.movieDAO().addToFavorites(movie));
         }
         else {
-            mDb.movieDAO().removeFromFavorites(movie);
+            DBExecutor.getInstance().getExecutor().execute(() -> mDb.movieDAO().removeFromFavorites(movie));
         }
         changeMenuIcon(item);
     }

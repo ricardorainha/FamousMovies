@@ -21,4 +21,7 @@ public interface MovieDAO {
 
     @Delete
     void removeFromFavorites(Movie favorite);
+
+    @Query("SELECT * FROM " + MovieDatabase.FAVORITES_TABLE_NAME + " WHERE id = :id")
+    Movie getFavoriteById(int id);
 }
