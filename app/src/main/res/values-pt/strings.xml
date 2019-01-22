@@ -9,7 +9,7 @@
     <string name="vote_average">Média de Votos</string>
     <string name="overview">Sinopse (em inglês)</string>
     <string name="poster_description">Pôster do Filme</string>
-    <string name="error_request_movies_list">Erro carregando lista de filmes.</string>
+    <string name="error_request_movies_list">Erro carregando lista de filmes. Mostrar Favoritos?</string>
     <string name="most_popular_movies">Filmes Mais Populares</string>
     <string name="top_rated_movies">Filmes Melhores Avaliados</string>
     <string name="reviews">Resenhas</string>
@@ -20,4 +20,6 @@
     <string name="error_message_response">Houve um problema ao receber informações do servidor.</string>
     <string name="error_message_request">Houve um problema ao requisitar informações ao servidor.</string>
     <string name="favorites">Favoritos</string>
+    <string name="no_items_found">Nenhum filme encontrado</string>
+    <string name="show">Mostrar</string>
 </resources>

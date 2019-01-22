@@ -14,10 +14,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.ricardorainha.famousmovies.R;
 import com.ricardorainha.famousmovies.adapter.MoviesAdapter;
 import com.ricardorainha.famousmovies.controllers.MoviesListController;
@@ -31,9 +33,11 @@ import java.util.Observer;
 public class MainActivity extends AppCompatActivity implements Observer, MoviesAdapter.MoviesListItemClickListener {
 
     private MoviesListController controller;
+    private FrameLayout flMainRoot;
     private RecyclerView rvMovies;
     private ProgressBar pbLoading;
     private TextView tvWarningMessage;
+    private TextView tvNoItems;
     private TextView tvMoviesType;
     private MoviesAdapter adapter;
     private SwipeRefreshLayout srlRefresh;
@@ -95,10 +99,13 @@ public class MainActivity extends AppCompatActivity implements Observer, MoviesA
             if (result == MoviesListController.RESPONSE_SUCCESS) {
                 setupMovieAdapter(controller.getMoviesList(), controller.getRequestType());
             } else if ((result == MoviesListController.RESPONSE_FAILED) || (result == MoviesListController.REQUEST_FAILURE)) {
-                Toast.makeText(this, R.string.error_request_movies_list, Toast.LENGTH_LONG).show();
+                Snackbar.make(flMainRoot, R.string.error_request_movies_list, Snackbar.LENGTH_LONG)
+                        .setAction(R.string.show, v -> requestMovies(MoviesListController.RequestType.FAVORITES))
+                        .show();
             }
 
             showWarningMessage(result != MoviesListController.RESPONSE_SUCCESS);
+            showNoItemsView(false);
             showProgressBar(false);
         }
     }
@@ -128,12 +135,14 @@ public class MainActivity extends AppCompatActivity implements Observer, MoviesA
     }
 
     private void configureViews() {
+        flMainRoot = findViewById(R.id.fl_main_root);
         rvMovies = findViewById(R.id.rv_movies);
         int numberOfColumns = 2;
         rvMovies.setLayoutManager(new GridLayoutManager(this, numberOfColumns));
 
         pbLoading = findViewById(R.id.pb_loading);
         tvWarningMessage = findViewById(R.id.tv_warning_message);
+        tvNoItems = findViewById(R.id.tv_no_items);
         tvMoviesType = findViewById(R.id.tv_movies_list_type);
 
         srlRefresh = findViewById(R.id.srl_refresh);
@@ -146,7 +155,10 @@ public class MainActivity extends AppCompatActivity implements Observer, MoviesA
     private void requestMovies(MoviesListController.RequestType requestType) {
         showMoviesViews(false);
         showWarningMessage(false);
+        showNoItemsView(false);
         showProgressBar(true);
+        currentMovieListType = requestType;
+        tvMoviesType.setText(getResources().getString(requestType.getResourceId()));
         if (requestType == MoviesListController.RequestType.FAVORITES) {
             srlRefresh.setEnabled(false);
             showFavorites();
@@ -159,7 +171,6 @@ public class MainActivity extends AppCompatActivity implements Observer, MoviesA
 
     private void showMoviesViews(boolean show) {
         rvMovies.setVisibility(show ? View.VISIBLE : View.GONE);
-        tvMoviesType.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
     private void showProgressBar(boolean show) {
@@ -170,19 +181,24 @@ public class MainActivity extends AppCompatActivity implements Observer, MoviesA
         tvWarningMessage.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
+    private void showNoItemsView(boolean show) {
+        tvNoItems.setVisibility(show ? View.VISIBLE : View.GONE);
+    }
+
     private void setupMovieAdapter(List<Movie> movies, MoviesListController.RequestType moviesType) {
         currentMovies = movies;
         currentMovieListType = moviesType;
         adapter = new MoviesAdapter(movies, this);
         rvMovies.setAdapter(adapter);
-        tvMoviesType.setText(getResources().getString(moviesType.getResourceId()));
-        showMoviesViews(true);
+        showMoviesViews(movies.size() > 0);
+        showNoItemsView(movies.size() <= 0);
     }
 
     private void showFavorites() {
-        setupMovieAdapter(viewModel.getFavorites().getValue(), MoviesListController.RequestType.FAVORITES);
         showWarningMessage(false);
+        showNoItemsView(false);
         showProgressBar(false);
+        setupMovieAdapter(viewModel.getFavorites().getValue(), MoviesListController.RequestType.FAVORITES);
     }
 
     @Override
