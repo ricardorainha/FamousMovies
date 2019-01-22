@@ -148,10 +148,13 @@ public class MainActivity extends AppCompatActivity implements Observer, MoviesA
         showWarningMessage(false);
         showProgressBar(true);
         if (requestType == MoviesListController.RequestType.FAVORITES) {
+            srlRefresh.setEnabled(false);
             showFavorites();
         }
-        else
+        else {
+            srlRefresh.setEnabled(true);
             controller.requestMovies(requestType);
+        }
     }
 
     private void showMoviesViews(boolean show) {
